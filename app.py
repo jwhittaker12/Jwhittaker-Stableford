@@ -251,6 +251,7 @@ def _build_excel(stats, players):
         cell(ws, f"H{i}", "→  Steady", bg=bg)
     return wb
 
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
