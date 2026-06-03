@@ -84,4 +84,4 @@ as a free hosted database. Ask Claude to help you switch the DB connection.
 
 ## Questions?
 Just ask Claude — the full build script (`build_golf_v5.py`) contains all the round
-data and can regenerate your Excel file at any time.
+data and can regenerate your Excel file at any time..
