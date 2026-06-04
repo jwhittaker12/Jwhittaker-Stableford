@@ -94,8 +94,10 @@ def seed_db():
 def get_standings():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cur.execute("SELECT name FROM players ORDER BY name")
-    players = [r["name"] for r in cur.fetchall()]
+    cur.execute("SELECT name, handicap FROM players ORDER BY name")
+    player_rows = cur.fetchall()
+    players = [r["name"] for r in player_rows]
+    hcaps   = {r["name"]: r["handicap"] for r in player_rows}
     cur.execute("SELECT * FROM rounds ORDER BY date")
     rows = cur.fetchall()
     cur.close(); conn.close()
@@ -106,7 +108,7 @@ def get_standings():
         tp  = sum(r["points"] for r in pr)
         pph = round(tp / th, 4) if th else 0
         stats[p] = {"rounds": len(pr), "holes": th, "points": tp, "pph": pph,
-                    "handicap": HANDICAPS.get(p, 18), "history": [dict(r) for r in pr]}
+                    "handicap": hcaps.get(p, 18), "history": [dict(r) for r in pr]}
     ranked = sorted([(p, s["pph"]) for p, s in stats.items() if s["holes"] >= MIN_HOLES],
                     key=lambda x: -x[1])
     for i, (p, _) in enumerate(ranked):
